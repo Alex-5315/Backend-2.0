@@ -1,29 +1,17 @@
-// Importar el servicio de autenticación que contiene la lógica para manejar el inicio de sesión
+// importamos el servicio de auntenticacion
 const authService = require('../services/auth.service');
 
-// Controlador para manejar el inicio de sesión
-exports.login = async (req, res) => {
-    // "req" (request) contiene la información enviada por el cliente en la solicitud
-    // "res" (response) se utiliza para enviar una respuesta al cliente
-    const { email, password } = req.body; // Extraer el email y la contraseña del cuerpo de la solicitud (req.body)
-    
-    try {
-        // Llamar al servicio de autenticación para iniciar sesión con el email y la contraseña proporcionados
+// Controlador para el Inicio sesión
+exports.login = async (req, res) => {  // "req" contiene la solicitud del cliente con sus datos y "res" sirve para enviar respuestas ha esa solicitud
+    const { email, password } = req.body; // el "req.body" contiene los datos enviados por el cliente
+    try{ // "try" Si no hay problema con la solicitud
         const token = await authService.loginUser(email, password);
-
-        // Responder al cliente con un mensaje de éxito y el token generado, junto con un código de estado 200
         res.status(200).json({ message: 'Inicio de sesión exitoso', token });
-    } catch (err) {
-        // Si ocurre algún error, responder al cliente con un código de estado 400 (Solicitud incorrecta)
-        // y un mensaje que detalla el error
-        res.status(400).json({ message: err.message });
+    } catch (err) { // "catch" Si hay problema con la solicitud
+        res.status(400).json({ message: err.message});
     }
 };
 
-/* 
-Notas adicionales:
-- La función está declarada como "async" porque realiza operaciones asíncronas, como llamadas al servicio
-de autenticación para verificar los datos de inicio de sesión.
-- El uso de "try" permite manejar la lógica principal del controlador, mientras que "catch" captura cualquier 
-error que pueda ocurrir y lo maneja apropiadamente, devolviendo una respuesta al cliente.
-*/
+/* El "async" declara que la función es asíncrona. Esto permite utilizar la palabra clave "await" dentro de la función,
+para manejar operaciones que toman tiempo (como consultas a la base de datos o llamadas a las APIs),
+y recibir el resultado antes de continuar.*/
