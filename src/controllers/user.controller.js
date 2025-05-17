@@ -54,45 +54,44 @@ exports.getAllUsersByRolId = async (req, res) => {
 
 // Controlador para actualizar un usuario
 exports.updateUser = async (req, res) => {
-    // Extraer el ID del usuario desde los parámetros de la URL
     const { id } = req.params;
-
-    // Extraer los datos necesarios desde el cuerpo de la solicitud
     const { nombre, email, rol_id, administrador_id } = req.body;
-
-    // Extraer el ID del administrador desde el token de autenticación
     const admin_from_token = req.user.administrador_id;
+    const rolUsuarioAutenticado = req.user.rol_id; // ✅ Nuevo parámetro
+
+    console.log('ID del usuario a modificar:', id);
+    console.log('Datos enviados:', { nombre, email, rol_id, administrador_id });
+    console.log('Admin autenticado desde el token:', admin_from_token); 
+    console.log('Rol del usuario autenticado:', rolUsuarioAutenticado);
 
     try {
-        // Llamar al servicio para actualizar el usuario con los nuevos datos
-        const user = await userService.updateUser(id, nombre, email, rol_id, administrador_id, admin_from_token);
-
-        // Responder al cliente con el usuario actualizado y un código de estado 200
+        const user = await userService.updateUser(id, nombre, email, rol_id, administrador_id, admin_from_token, rolUsuarioAutenticado);
         res.status(200).json({ message: 'El usuario ha sido actualizado con éxito', user });
     } catch (err) {
-        // En caso de error, responder al cliente con un código de estado 500
+        console.error('Error en el controlador updateUser:', err);
         res.status(500).json({ message: err.message });
     }
 };
+
 
 // Controlador para eliminar un usuario
 exports.deleteUser = async (req, res) => {
-    // Extraer el ID del usuario desde los parámetros de la URL
     const { id } = req.params;
-
-    // Extraer el ID del administrador desde el token de autenticación
     const admin_from_token = req.user.administrador_id;
+    const rolUsuarioAutenticado = req.user.rol_id; // ✅ Nuevo parámetro
+
+    console.log(`Intentando eliminar usuario con ID: ${id}`);
+    console.log(`Admin autenticado desde el token: ${admin_from_token}`);
+    console.log(`Rol del usuario autenticado: ${rolUsuarioAutenticado}`);
 
     try {
-        // Llamar al servicio para eliminar el usuario con el ID proporcionado
-        const result = await userService.deleteUser(id, admin_from_token);
-
-        // Responder al cliente con un mensaje de éxito y un código de estado 200
+        const result = await userService.deleteUser(id, admin_from_token, rolUsuarioAutenticado);
         res.status(200).json(result);
     } catch (err) {
-        // En caso de error, responder al cliente con un código de estado 500
+        console.error('Error en el controlador deleteUser:', err);
         res.status(500).json({ message: err.message });
     }
 };
+
 
 
