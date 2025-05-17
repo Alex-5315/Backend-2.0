@@ -57,7 +57,7 @@ exports.updateUser = async (req, res) => {
     const { id } = req.params;
     const { nombre, email, rol_id, administrador_id } = req.body;
     const admin_from_token = req.user.administrador_id;
-    const rolUsuarioAutenticado = req.user.rol_id; // ✅ Nuevo parámetro
+    const rolUsuarioAutenticado = req.user.rol_id; // PARTE EDITADA: Se agregó `rolUsuarioAutenticado` como parámetro
 
     console.log('ID del usuario a modificar:', id);
     console.log('Datos enviados:', { nombre, email, rol_id, administrador_id });
@@ -73,12 +73,11 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-
 // Controlador para eliminar un usuario
 exports.deleteUser = async (req, res) => {
     const { id } = req.params;
     const admin_from_token = req.user.administrador_id;
-    const rolUsuarioAutenticado = req.user.rol_id; // ✅ Nuevo parámetro
+    const rolUsuarioAutenticado = req.user.rol_id; // PARTE EDITADA: Se agregó `rolUsuarioAutenticado` como parámetro
 
     console.log(`Intentando eliminar usuario con ID: ${id}`);
     console.log(`Admin autenticado desde el token: ${admin_from_token}`);
@@ -92,6 +91,4 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
-
 
